@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package product;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "./pkg/core/product";
+
+message FetchRequest {
+    string url = 1;
+}
+
+message FetchResponse {
+    int64 updatesAmount = 1;
+    int64 addsAmount = 2;
+    int64 deletesAmount = 3;
+    int64 totalAmount = 4;
+}
+
+message ListRequest {
+    enum SortingMode {
+        NAME = 0;
+        PRICE = 1;
+        AMOUNT = 2;
+        CHANGES_AMOUNT = 3;
+        LAST_CHANGE = 4;
+    }
+
+    bool reversed = 1;
+    SortingMode mode = 2;
+    int64 pageSize = 3; 
+    int64 pageOffset = 4;
+}
+
+message ListResponseItem {
+    string name = 1;
+    int64 price = 2;
+    int64 changeAmount = 3;
+    google.protobuf.Timestamp lastChange = 4;
+}
+
+message ListResponse {
+    repeated ListResponseItem items = 1;
+}
+
+service ProductService {
+    rpc Fetch(FetchRequest) returns (FetchResponse) {};
+    rpc List(ListRequest) returns (ListResponse) {};
+}

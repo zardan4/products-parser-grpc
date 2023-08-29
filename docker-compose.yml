@@ -1,0 +1,10 @@
+services:
+  app:
+    restart: always
+    container_name: go-server
+    tty: true
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "${SERVER_PORT}:${SERVER_INTERNAL_PORT}"
